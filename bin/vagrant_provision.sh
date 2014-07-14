@@ -70,6 +70,11 @@ mysql -e "GRANT ALL ON kitsune.* TO kitsune@localhost IDENTIFIED BY 'password'"
 # Install npm and included packages (lessc is the one we need of these)
 npm install 
 
+# Fixes for Rachel specifically.
+bash $INSTALL_DIR/kitsune/bin/virtualize_vendor.sh
+cp $INSTALL_DIR/kitsune/bin/kitsune.pth $INSTALL_DIR/kitsune/vendor/
+cp $INSTALL_DIR/kitsune/bin/kitsune.pth $INSTALL_DIR/kitsune/
+
 # Retrieve and store historical version data
 ./manage.py update_product_details
 

@@ -1,0 +1,12 @@
+packages
+packages/coverage
+packages/Babel
+packages/ipython
+packages/setuptools
+packages/importlib
+packages/mock
+packages/sqlalchemy
+packages/nose
+packages/httplib2/python2
+packages/mimeparse
+packages/google-api-python-client
