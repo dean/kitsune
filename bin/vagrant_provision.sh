@@ -82,3 +82,4 @@ cp $INSTALL_DIR/kitsune/bin/kitsune.pth $INSTALL_DIR/kitsune/vendor/
 cp $INSTALL_DIR/kitsune/bin/manage.py $INSTALL_DIR/kitsune/
 cp -r $INSTALL_DIR/kitsune/bin/json \
       $INSTALL_DIR/virtualenv/local/lib/python2.7/site-packages/product_details/
+
