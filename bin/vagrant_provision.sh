@@ -39,7 +39,7 @@ debconf-set-selections <<< 'mariadb-server-5.5 mysql-server/root_password_again 
 apt-get install -y sphinx-common libapache2-mod-wsgi python-pip libmysqlclient-dev \
                    libxml2-dev libxslt1-dev zlib1g-dev libjpeg-dev python-dev libssl-dev \
                    openjdk-7-jre-headless mariadb-server-5.5 nodejs elasticsearch redis-server \
-                   memcached
+                   memcached git
 
 
 # Setup the virtualenv and start using it
@@ -50,6 +50,8 @@ source $INSTALL_DIR/virtualenv/bin/activate
 
 pip install -r $INSTALL_DIR/kitsune/requirements/compiled.txt 
 pip install nose-progressive==1.5.0
+pip install peep==1.2
+pip install requests
 
 # Copy configurations for kitsune and mysql
 # MySQL Default User: root
@@ -71,13 +73,12 @@ mysql -e "GRANT ALL ON kitsune.* TO kitsune@localhost IDENTIFIED BY 'password'"
 npm install 
 
 # Fixes for Rachel specifically.
+export DJANGO_SETTINGS_MODULE="kitsune.settings"
+python $INSTALL_DIR/kitsune/bin/peepify/peepify.py --target-dir \
+        $INSTALL_DIR/kitsune/vendor/src/ --tarballs-dir tarballs
+peep install -r requirements.txt
 bash $INSTALL_DIR/kitsune/bin/virtualize_vendor.sh
 cp $INSTALL_DIR/kitsune/bin/kitsune.pth $INSTALL_DIR/kitsune/vendor/
-cp $INSTALL_DIR/kitsune/bin/kitsune.pth $INSTALL_DIR/kitsune/
-
-# Retrieve and store historical version data
-./manage.py update_product_details
-
-# Setup tables and generate some data
-./manage.py syncdb --migrate --noinput
-./manage.py generatedata
+cp $INSTALL_DIR/kitsune/bin/manage.py $INSTALL_DIR/kitsune/
+cp -r $INSTALL_DIR/kitsune/bin/json \
+      $INSTALL_DIR/virtualenv/local/lib/python2.7/site-packages/product_details/
