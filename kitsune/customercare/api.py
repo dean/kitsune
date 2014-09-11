@@ -1,5 +1,6 @@
 import json
 
+from django.http import HttpResponse
 from rest_framework import generics, serializers, status
 from rest_framework.response import Response
 from rest_framework.decorators import api_view
@@ -89,9 +90,12 @@ def unban(request):
 
 
 @permission_required('customercare.ignore_account')
-@api_view(['POST'])
 def ignore(request):
     """Ignores a twitter account from showing up in the AoA tool."""
+    if request.method != 'POST':
+        resp = json.dumps({'error': 'Not a POST request!'})
+        return HttpResponse(resp, content_type='application/json')
+
     username = json.loads(request.body).get('username')
     if not username:
         raise GenericAPIException(status.HTTP_400_BAD_REQUEST,
@@ -111,7 +115,8 @@ def ignore(request):
         account.ignored = True
         account.save()
 
-    return Response({'success': 'Account is now being ignored!'})
+    resp = json.dumps({'success': 'Account is now being ignored!'})
+    return HttpResponse(resp, content_type='application/json')
 
 
 @permission_required('customercare.ignore_account')
